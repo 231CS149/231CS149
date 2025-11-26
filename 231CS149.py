@@ -161,3 +161,33 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+from mininet.topo import Topo
+from mininet.net import Mininet
+from mininet.link import TCLink
+from mininet.cli import CLI
+from mininet.log import setLogLevel
+
+class CustomTopology(Topo):
+    def build(self):
+        # Hosts
+        h1 = self.addHost('h1')
+        h2 = self.addHost('h2')
+
+        # Switch
+        s1 = self.addSwitch('s1')
+
+        # Links
+        self.addLink(h1, s1, cls=TCLink, bw=10, delay='10ms')
+        self.addLink(h2, s1, cls=TCLink, bw=10, delay='10ms')
+
+def run():
+    net = Mininet(topo=CustomTopology(), link=TCLink)
+    net.start()
+    CLI(net)
+    net.stop()
+
+if __name__ == '__main__':
+    setLogLevel('info')
+    run()
+
